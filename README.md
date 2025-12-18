@@ -6,6 +6,8 @@
 
 This is a personal productivity application that combines calorie tracking with a to-do list. It allows users to log their daily calorie intake and manage their tasks, with the ability to export a daily summary to the clipboard.
 
+LIVE LINK https://aliargonaut.github.io/personal-productivity-app/
+
 ## Table of Contents
 
 *   [Features](#features)
