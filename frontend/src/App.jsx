@@ -85,6 +85,8 @@ export default function CalorieTracker() {
     try {
       await navigator.clipboard.writeText(JSON.stringify(entry, null, 2));
       setSubmitText('copied!');
+      setTodos([])
+      setTotalCalories(0)
       setTimeout(() => {
         setSubmitText('submit button (copies JSON to clipboard)');
       }, 2000);
