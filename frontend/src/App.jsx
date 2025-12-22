@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function CalorieTracker() {
   const [totalCalories, setTotalCalories] = useState(0);
@@ -6,6 +6,48 @@ export default function CalorieTracker() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
   const [submitText, setSubmitText] = useState('submit button (copies JSON to clipboard)');
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // Load saved data on mount
+  React.useEffect(() => {
+    try {
+      const savedCalories = localStorage.getItem('supertask-calories');
+      const savedTodos = localStorage.getItem('supertask-todos');
+      
+      if (savedCalories) {
+        setTotalCalories(parseInt(savedCalories));
+      }
+      
+      if (savedTodos) {
+        setTodos(JSON.parse(savedTodos));
+      }
+    } catch (error) {
+      console.log('No saved data found or error loading:', error);
+    }
+    setIsLoaded(true);
+  }, []);
+
+  // Save calories whenever they change
+  React.useEffect(() => {
+    if (isLoaded) {
+      try {
+        localStorage.setItem('supertask-calories', totalCalories.toString());
+      } catch (err) {
+        console.error('Error saving calories:', err);
+      }
+    }
+  }, [totalCalories, isLoaded]);
+
+  // Save todos whenever they change
+  React.useEffect(() => {
+    if (isLoaded) {
+      try {
+        localStorage.setItem('supertask-todos', JSON.stringify(todos));
+      } catch (err) {
+        console.error('Error saving todos:', err);
+      }
+    }
+  }, [todos, isLoaded]);
 
   const addCalories = () => {
     const amount = parseInt(calorieInput);
@@ -73,7 +115,11 @@ export default function CalorieTracker() {
         padding: '20px',
         fontFamily: 'Courier New, monospace',
         minHeight: '600px'
-      }}>Supertask
+      }}>
+        <div style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '20px', textAlign: 'center' }}>
+          Supertask
+        </div>
+        
         {/* Total Calories Box */}
         <div style={{
           border: '2px solid #8b7355',
